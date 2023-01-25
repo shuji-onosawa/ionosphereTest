@@ -8,6 +8,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 ax1.plot(df['time'], df['v_perp'], 'b-', label='v_perp')
 ax1.plot(df['time'], df['v_para'], 'r-', label='v_para')
 ax1.set_xlabel('time(s)')
+ax1.set_yscale("log")
 ax1.set_ylabel('velocity')
 
 # Add new y-axis for pitch_angle
@@ -23,6 +24,7 @@ ax3.yaxis.set_tick_params(labelright=True)
 ax2.plot(df['time'], df['v_perp_eV'], 'b-', label='v_perp_eV')
 ax2.plot(df['time'], df['v_para_eV'], 'r-', label='v_para_eV')
 ax2.set_xlabel('time(s)')
+ax2.set_yscale("log")
 ax2.set_ylabel('velocity_eV')
 
 ax4 = ax2.twinx()

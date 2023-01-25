@@ -10,7 +10,7 @@ const double init_v_perp_eV = 0.1;
 const double init_v_para_eV = 0.1;
 const double init_v_perp = sqrt(init_v_perp_eV*(1.60218e-19)*2.0/mass);
 const double init_v_para = sqrt(init_v_para_eV*(1.60218e-19)*2.0/mass);
-const double max_v_para_for_resonance_eV = 100.0;
+const double max_v_para_for_resonance_eV = 1.0;
 const double max_v_para_for_resonance = sqrt(max_v_para_for_resonance_eV*(1.60218e-19)*2.0/mass);
 const double R_e = 6.3e6;
 const double L_shell = 10.0;
@@ -28,7 +28,7 @@ double dv_para(double v_perp, double v_para) {
 
 double dv_perp(double v_perp, double v_para, double t) {
     double dv_perp_val = electric_acceleration - v_para / v_perp * dv_para(v_perp, v_para);
-    if(v_para>max_v_para_for_resonance||fmod(t,5.0)>1.0){
+    if(v_para>max_v_para_for_resonance){
         dv_perp_val = - v_para / v_perp * dv_para(v_perp, v_para);
     }
     return dv_perp_val;
