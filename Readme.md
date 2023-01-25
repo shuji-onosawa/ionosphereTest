@@ -42,5 +42,18 @@ If you rewrite some parameter, output graph's name is changed, but some other pa
 
 ---
 
+## Folder
+- data 
+    - output data
+- doc 
+    - Simulation document, like basic equations
+- execute
+    - folder for execture file
+- graphs
+    - graphs...
+- src
+    - soruce code
+---
+
 ## Equation
 you read doc folder.
