@@ -19,7 +19,7 @@ const ion_type ion = oxygen;
 const double electric_field = 1.0e-3;
 const double init_v_perp_eV = 0.1;
 const double init_v_para_eV = 0.1;
-const double max_v_para_for_resonance_eV = 100.0;
+const double max_v_para_for_resonance_eV = 10.0;
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
 //Graphs_file_No_name_param
