@@ -103,7 +103,6 @@ int main() {
         v_para += dt / 6.0 * (k1_para + 2.0 * k2_para + 2.0 * k3_para + k4_para);
         t += dt;
         dx_para= v_para*dt;
-        x_para += dx_para;
         //End RK4
 
         //RK4 for lambda
@@ -125,6 +124,7 @@ int main() {
         }
 
         //WriteOut section(x plot)
+        x_para += fabs(dx_para);
         t_per_para_grid += dt;
         if(x_para>x_para_grid){
             if(firstcount_for_grid == 0){
