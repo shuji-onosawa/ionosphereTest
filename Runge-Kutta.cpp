@@ -38,10 +38,18 @@ int main() {
     double v_perp = init_v_perp;
     double v_para = init_v_para;
     double t = 0.0;
+    double x_para = 0.0;
+    double dx_para_grid = 1e3;
+    double x_para_grid = dx_para_grid;
+    double t_per_para_grid = 0.0;
+    double first_t_per_para_grid = 0.0;
+    int firstcount_for_grid = 0;
     int write_out_count = 0;
 
-    std::ofstream ofs("result.csv");
-    ofs << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV" << std::endl;
+    std::ofstream ofs_t("result_t.csv");
+    ofs_t << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV" << std::endl;
+    std::ofstream ofs_x("result_x.csv");
+    ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV" << std::endl;
 
     while (t < T) {
         double k1_perp = dv_perp(v_perp, v_para, t);
@@ -58,21 +66,40 @@ int main() {
         v_perp += dt / 6.0 * (k1_perp + 2.0 * k2_perp + 2.0 * k3_perp + k4_perp);
         v_para += dt / 6.0 * (k1_para + 2.0 * k2_para + 2.0 * k3_para + k4_para);
         t += dt;
+        t_per_para_grid += dt;
 
         double pitch_angle = atan2(v_perp,v_para)*180/(3.1415926535);
         double v_perp_eV = 0.5*mass*v_perp*v_perp/(1.60218e-19);
         double v_para_eV = 0.5*mass*v_para*v_para/(1.60218e-19);
+
+        x_para += v_para*dt;
         
         write_out_count += 1;
         if(write_out_count>write_out_times){
-            ofs << t << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << std::endl;
+            ofs_t << t << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << std::endl;
             write_out_count = 0;
         }
+
+        if(x_para>x_para_grid){
+            if(firstcount_for_grid == 0){
+                first_t_per_para_grid = t_per_para_grid;
+                firstcount_for_grid += 1;
+            }
+            ofs_x << x_para_grid/1e3 << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << std::endl;
+            x_para_grid += dx_para_grid;
+            while (x_para>x_para_grid)
+            {
+                x_para_grid += dx_para_grid;
+            }
+            t_per_para_grid = 0.0;
+        }
+
     }
 
-    ofs.close();
+    ofs_t.close();
+    ofs_x.close();
 
-    std::system("/bin/python3 /home/skipjack/Documents/ionosphereTest/plot.py");
+    std::system("/bin/python3 /home/skipjack/Documents/ionosphereTest/plot_for_x.py");
 
     return 0;
 

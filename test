@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+dft = pd.read_csv('result_t.csv')
+
+fig = ax5
+
+ax5.plot(dfx['x'], dfx['v_perp'], 'b-', label='v_perp')
+ax5.plot(dfx['x'], dfx['v_para'], 'r-', label='v_para')
+ax5.set_xlabel('x(km)')
+ax5.set_yscale("log")
+ax5.set_ylabel('velocity')
+
+# Add new y-axis for pitch_angle
+ax7 = ax5.twinx()
+ax7.set_frame_on(True)
+ax7.patch.set_visible(False)
+pitch_angle = dfx['pitch_angle']
+relative_density = dfx['relative_density']
+ax7.plot(dfx['x'], pitch_angle,'g-',label='pitch_angle')
+ax7.plot(dfx['x'], relative_density,'m-',label='relative_density')
+ax7.set_ylabel('pitch_angle', color='g')
+ax7.set_ylabel('relative_density', color='m')
+ax7.yaxis.set_ticks_position('right')
+ax7.yaxis.set_tick_params(labelright=True)
+
+
+fig.legend(loc='upper left')
+plt.show()
