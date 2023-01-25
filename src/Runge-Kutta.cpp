@@ -19,7 +19,7 @@ const ion_type ion = oxygen;
 const double electric_field = 1.0e-3;
 const double init_v_perp_eV = 0.1;
 const double init_v_para_eV = 0.1;
-const double max_v_para_for_resonance_eV = 10.0;
+const double max_v_para_for_resonance_eV = 100.0;
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
 //Graphs_file_No_name_param
@@ -82,7 +82,7 @@ int main() {
     
 
     std::ofstream ofs_t("./data/result_t.csv");
-    ofs_t << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV" << std::endl;
+    ofs_t << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,inval_lat" << std::endl;
     std::ofstream ofs_x("./data/result_x.csv");
     ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,inval_lat" << std::endl;
 
@@ -120,7 +120,7 @@ int main() {
 
         write_out_count += 1;
         if(write_out_count>write_out_times){
-            ofs_t << t << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << std::endl;
+            ofs_t << t << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << inval_lat/3.14159265*180 << std::endl;
             write_out_count = 0;
         }
 
