@@ -28,7 +28,7 @@ const double init_Inval_lat_deg = 70.0;
 const double dx_para_grid = 1e3;//(m)
 const double dt = 0.001;//(s)
 const double T = 300.0;//(s)
-const int write_out_times = 10; // How many calculations do you write once?
+const int write_out_times = 10; // How many calculations do you write once (for time plot)?
 const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decrease invalid latitude. if this is 0, no effect.
 ////
 
