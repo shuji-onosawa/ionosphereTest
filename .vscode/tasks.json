@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build and Run",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-lstdc++",
+                "-o",
+                "Runge-Kutta.out",
+                "Runge-Kutta.cpp",
+                "&&",
+                "./Runge-Kutta.out"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
