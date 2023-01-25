@@ -20,7 +20,7 @@ dfx = pd.read_csv('./data/result_x.csv')
 fig, ((ax1, ax5), (ax2, ax6)) = plt.subplots(2, 2, figsize=(12, 8))
 
 #Graph1
-ax1.set_title('Time_plot')
+ax1.set_title('Graph1:Time_plot')
 ax1.plot(dft['time'], dft['v_perp_eV'], 'b-', label='v_perp_eV')
 ax1.plot(dft['time'], dft['v_para_eV'], 'r-', label='v_para_eV')
 ax1.set_xlabel('time(s)')
@@ -37,7 +37,7 @@ ax3.yaxis.set_tick_params(labelright=True)
 
 
 #Graph2
-ax2.set_title('Time_plot(log(t))')
+ax2.set_title('Graph2:Time_plot(log(t))')
 ax2.plot(dft['time'], dft['v_perp_eV'], 'b-', label='')
 ax2.plot(dft['time'], dft['v_para_eV'], 'r-', label='')
 ax2.set_xlabel('time(s)')
@@ -55,7 +55,7 @@ ax4.yaxis.set_tick_params(labelright=True)
 
 
 #Graph3
-ax5.set_title('x_plot')
+ax5.set_title('Graph3:x_plot')
 ax5.plot(dfx['x'], dfx['v_perp_eV'], 'b-', label='')
 ax5.plot(dfx['x'], dfx['v_para_eV'], 'r-', label='')
 ax5.set_xlabel('x(km)')
@@ -83,7 +83,7 @@ ax9.yaxis.set_tick_params(labelright=True)
 
 
 #Graph4
-ax6.set_title('x_plot(log(x))')
+ax6.set_title('Graph4:x_plot(log(x))')
 ax6.plot(dfx['x'], dfx['v_perp_eV'], 'b-', label='')
 ax6.plot(dfx['x'], dfx['v_para_eV'], 'r-', label='')
 ax6.set_xlabel('x(km)')
