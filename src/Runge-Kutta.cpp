@@ -24,11 +24,12 @@ const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
 //Graphs_file_No_name_param
 const double L_shell = 10.0;
-const double Inval_lat_deg = 70.0;
+const double init_Inval_lat_deg = 70.0;
 const double dx_para_grid = 1e3;//(m)
 const double dt = 0.001;//(s)
 const double T = 300.0;//(s)
 const int write_out_times = 10; // How many calculations do you write once?
+const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decrease invalid latitude. if this is 0, no effect.
 ////
 
 
@@ -39,20 +40,27 @@ const double init_v_perp = sqrt(init_v_perp_eV*(1.60218e-19)*2.0/mass);
 const double init_v_para = sqrt(init_v_para_eV*(1.60218e-19)*2.0/mass);
 const double max_v_para_for_resonance = sqrt(max_v_para_for_resonance_eV*(1.60218e-19)*2.0/mass);
 const double R_e = 6.3e6;
-const double Inval_lat = Inval_lat_deg/180.0*3.141592;
-const double grad_field = 3.0*sin(Inval_lat)*(5.0*sin(Inval_lat)*sin(Inval_lat)+3.0)
-/(pow((1.0+3.0*sin(Inval_lat)*sin(Inval_lat)),1.5)*cos(Inval_lat)*cos(Inval_lat))
-*(1.0/(R_e*L_shell));
+const double init_Inval_lat = init_Inval_lat_deg/180.0*3.141592;
 
-//Calculation
-double dv_para(double v_perp, double v_para) {
-    return grad_field * 0.5 * pow(v_perp, 2.0);
+double grad_field(double inval_lat){
+    return 3.0*sin(inval_lat)*(5.0*sin(inval_lat)*sin(inval_lat)+3.0)
+/(pow((1.0+3.0*sin(inval_lat)*sin(inval_lat)),1.5)*cos(inval_lat)*cos(inval_lat))
+*(1.0/(R_e*L_shell));
 }
 
-double dv_perp(double v_perp, double v_para, double t) {
-    double dv_perp_val = electric_acceleration - v_para / v_perp * dv_para(v_perp, v_para);
+double dlambda(double inval_lat){
+    return 1.0/(R_e*L_shell*cos(inval_lat)*sqrt(1.0+3.0*sin(inval_lat)*sin(inval_lat)));
+}
+
+//Calculation
+double dv_para(double v_perp, double v_para, double inval_lat) {
+    return grad_field(inval_lat) * 0.5 * pow(v_perp, 2.0);
+}
+
+double dv_perp(double v_perp, double v_para, double t, double inival_lat) {
+    double dv_perp_val = electric_acceleration - v_para / v_perp * dv_para(v_perp, v_para, inival_lat);
     if(v_para>max_v_para_for_resonance||fmod(t,occur_period)>occur_duration){
-        dv_perp_val = - v_para / v_perp * dv_para(v_perp, v_para);
+        dv_perp_val = - v_para / v_perp * dv_para(v_perp, v_para, inival_lat);
     }
     return dv_perp_val;
 }
@@ -61,11 +69,13 @@ int main() {
     double v_perp = init_v_perp;
     double v_para = init_v_para;
     double t = 0.0;
+    double inval_lat = init_Inval_lat;
     int write_out_count = 0;
 
     //Values for x direction plot
     double x_para = 0.0;
     double x_para_grid = dx_para_grid;
+    double dx_para = 0.0;
     double t_per_para_grid = 0.0;
     double first_t_per_para_grid = 0.0;
     int firstcount_for_grid = 0;
@@ -74,25 +84,34 @@ int main() {
     std::ofstream ofs_t("./data/result_t.csv");
     ofs_t << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV" << std::endl;
     std::ofstream ofs_x("./data/result_x.csv");
-    ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV" << std::endl;
+    ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,inval_lat" << std::endl;
 
     //RK4
     while (t < T) {
-        double k1_perp = dv_perp(v_perp, v_para, t);
-        double k1_para = dv_para(v_perp, v_para);
+        double k1_perp = dv_perp(v_perp, v_para, t, inval_lat);
+        double k1_para = dv_para(v_perp, v_para, inval_lat);
 
-        double k2_perp = dv_perp(v_perp + 0.5 * dt * k1_perp, v_para + 0.5 * dt * k1_para, t+0.5*dt);
-        double k2_para = dv_para(v_perp + 0.5 * dt * k1_perp, v_para + 0.5 * dt * k1_para);
+        double k2_perp = dv_perp(v_perp + 0.5 * dt * k1_perp, v_para + 0.5 * dt * k1_para, t+0.5*dt, inval_lat);
+        double k2_para = dv_para(v_perp + 0.5 * dt * k1_perp, v_para + 0.5 * dt * k1_para, inval_lat);
 
-        double k3_perp = dv_perp(v_perp + 0.5 * dt * k2_perp, v_para + 0.5 * dt * k2_para, t+0.5*dt);
-        double k3_para = dv_para(v_perp + 0.5 * dt * k2_perp, v_para + 0.5 * dt * k2_para);
+        double k3_perp = dv_perp(v_perp + 0.5 * dt * k2_perp, v_para + 0.5 * dt * k2_para, t+0.5*dt, inval_lat);
+        double k3_para = dv_para(v_perp + 0.5 * dt * k2_perp, v_para + 0.5 * dt * k2_para, inval_lat);
 
-        double k4_perp = dv_perp(v_perp + dt * k3_perp, v_para + dt * k3_para, t+dt);
-        double k4_para = dv_para(v_perp + dt * k3_perp, v_para + dt * k3_para);
+        double k4_perp = dv_perp(v_perp + dt * k3_perp, v_para + dt * k3_para, t+dt, inval_lat);
+        double k4_para = dv_para(v_perp + dt * k3_perp, v_para + dt * k3_para, inval_lat);
         v_perp += dt / 6.0 * (k1_perp + 2.0 * k2_perp + 2.0 * k3_perp + k4_perp);
         v_para += dt / 6.0 * (k1_para + 2.0 * k2_para + 2.0 * k3_para + k4_para);
         t += dt;
+        dx_para= v_para*dt;
+        x_para += dx_para;
         //End RK4
+
+        //RK4 for lambda
+        double k1_lambda = dlambda(inval_lat);
+        double k2_lambda = dlambda(inval_lat - 0.5 * dx_para * k1_lambda);
+        double k3_lambda = dlambda(inval_lat - 0.5 * dx_para * k2_lambda);
+        double k4_lambda = dlambda(inval_lat - dx_para * k3_lambda);
+        inval_lat -= dx_para / 6.0 * (k1_lambda + 2.0 * k2_lambda + 2.0 * k3_lambda + k4_lambda);
 
         //WriteOut section(Time plot)
         double pitch_angle = atan2(v_perp,v_para)*180/(3.1415926535);
@@ -106,7 +125,6 @@ int main() {
         }
 
         //WriteOut section(x plot)
-        x_para += v_para*dt;
         t_per_para_grid += dt;
         if(x_para>x_para_grid){
             if(firstcount_for_grid == 0){
@@ -114,7 +132,7 @@ int main() {
                 firstcount_for_grid += 1;
             }
 
-            ofs_x << x_para_grid/1e3 << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << std::endl;
+            ofs_x << x_para_grid/1e3 << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << inval_lat/3.141592*180.0 << std::endl;
             x_para_grid += dx_para_grid;
 
             while (x_para>x_para_grid)
