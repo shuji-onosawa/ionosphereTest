@@ -17,6 +17,29 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+
+        {
+            "label": "compile and run",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "-lstdc++",
+                "-o",
+                "Runge-Kutta.out",
+                "Runge-Kutta.cpp"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
+
 }
+

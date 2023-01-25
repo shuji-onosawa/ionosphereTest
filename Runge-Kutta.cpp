@@ -2,30 +2,46 @@
 #include <cmath>
 #include <fstream>
 
-const double electric_acceleration = 1e5/16.0;
-const double grad_field = 2.5e-9;
+
+const double mass = 1.6e-27*16.0;
+const double electric_field = 1.0e-3;
+const double electric_acceleration = electric_field*1.6e-19/mass;
+const double init_v_perp_eV = 0.1;
+const double init_v_para_eV = 0.1;
+const double init_v_perp = sqrt(init_v_perp_eV*(1.60218e-19)*2.0/mass);
+const double init_v_para = sqrt(init_v_para_eV*(1.60218e-19)*2.0/mass);
+const double max_v_para_for_resonance_eV = 100.0;
+const double max_v_para_for_resonance = sqrt(max_v_para_for_resonance_eV*(1.60218e-19)*2.0/mass);
+const double R_e = 6.3e6;
+const double L_shell = 10.0;
+const double Inval_lat = 70.0 /180.0*3.141592;
+const double grad_field = 3.0*sin(Inval_lat)*(5.0*sin(Inval_lat)*sin(Inval_lat)+3.0)
+/(pow((1.0+3.0*sin(Inval_lat)*sin(Inval_lat)),1.5)*cos(Inval_lat)*cos(Inval_lat))
+*(1.0/(R_e*L_shell));
 const double dt = 0.001;
-const double T = 1200.0;
+const double T = 300.0;
+const int write_out_times = 10;
 
 double dv_para(double v_perp, double v_para) {
-    return grad_field * pow(v_perp, 2.0);
+    return grad_field * 0.5 * pow(v_perp, 2.0);
 }
 
 double dv_perp(double v_perp, double v_para, double t) {
     double dv_perp_val = electric_acceleration - v_para / v_perp * dv_para(v_perp, v_para);
-    if(v_para>3.5e5||fmod(t,5.0)>1.0){
+    if(v_para>max_v_para_for_resonance||fmod(t,5.0)>1.0){
         dv_perp_val = - v_para / v_perp * dv_para(v_perp, v_para);
     }
     return dv_perp_val;
 }
 
 int main() {
-    double v_perp = 1.1e3;
-    double v_para = 1.1e3;
+    double v_perp = init_v_perp;
+    double v_para = init_v_para;
     double t = 0.0;
+    int write_out_count = 0;
 
     std::ofstream ofs("result.csv");
-    ofs << "time,v_perp,v_para,pitch_angle" << std::endl;
+    ofs << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV" << std::endl;
 
     while (t < T) {
         double k1_perp = dv_perp(v_perp, v_para, t);
@@ -44,8 +60,14 @@ int main() {
         t += dt;
 
         double pitch_angle = atan2(v_perp,v_para)*180/(3.1415926535);
-
-        ofs << t << "," << v_perp << "," << v_para << "," << pitch_angle << std::endl;
+        double v_perp_eV = 0.5*mass*v_perp*v_perp/(1.60218e-19);
+        double v_para_eV = 0.5*mass*v_para*v_para/(1.60218e-19);
+        
+        write_out_count += 1;
+        if(write_out_count>write_out_times){
+            ofs << t << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << std::endl;
+            write_out_count = 0;
+        }
     }
 
     ofs.close();
