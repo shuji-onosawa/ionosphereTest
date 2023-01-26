@@ -18,7 +18,7 @@ dft = pd.read_csv('./data/result_t.csv')
 dfx = pd.read_csv('./data/result_x.csv')
 
 
-fig, ((ax1, ax5), (ax2, ax6)) = plt.subplots(2, 2, figsize=(12, 8))
+fig, ((ax11, ax1, ax5), (ax15, ax2, ax6), ) = plt.subplots(2, 3, figsize=(12, 8))
 
 # Graph1
 ax1.set_title('Graph1:Time_plot')
@@ -111,11 +111,43 @@ ax10.set_ylabel('pitch_angle(degree)', color='g')
 ax10.yaxis.set_ticks_position('right')
 ax10.yaxis.set_tick_params(labelright=True)
 
+# Graph5
+ax11.set_title('Graph5:erg_plot')
+ax11.plot(dfx['x'], dfx['energy'], 'y-', label='energy')
+ax11.set_xlabel('x(km)')
+ax11.set_ylabel('Energy(eV)')
+
+ax12 = ax11.twinx()
+ax12.set_frame_on(True)
+ax12.patch.set_visible(False)
+ax12.plot(dfx['x'], dfx['energy_density'], 'c-', label='energy_density')
+ax12.set_ylabel('energy_density()', color='c')
+ax12.set_yscale('log')
+ax12.yaxis.set_ticks_position('right')
+ax12.yaxis.set_tick_params(labelright=True)
+
+# Graph6
+ax15.set_title('Graph6:erg_plot(log)')
+ax15.plot(dfx['x'], dfx['energy'], 'y-', label='')
+ax15.set_xlabel('x(km)')
+ax15.set_xscale('log')
+ax15.set_ylabel('Energy(eV)')
+
+ax16 = ax15.twinx()
+ax16.set_frame_on(True)
+ax16.patch.set_visible(False)
+ax16.plot(dfx['x'], dfx['energy_density'], 'c-', label='')
+ax16.set_ylabel('energy_density()', color='c')
+ax16.set_yscale('log')
+ax16.yaxis.set_ticks_position('right')
+ax16.yaxis.set_tick_params(labelright=True)
+
+
 fig.legend(loc='upper left')
 plt.suptitle(ion_name + " " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV +
              'eV, max_v_para_for_resonance = ' + max_v_para_for_resonance_eV + "eV,\nWave occurs for " + occur_duration + "sec during " +
              occur_period + "sec, " + "accleration_time_max" + accele_t_max + 'sec')
-plt.subplots_adjust(wspace=0.4, hspace=0.4)
+plt.subplots_adjust(wspace=0.5, hspace=0.4)
 plt.savefig('./graphs/' + ion_name + electric_field + 'mVm_' + 'init_v_para_' + init_v_para_eV + 'eV_init_v_perp_' + init_v_perp_eV +
             'eV_max_resonance_' + max_v_para_for_resonance_eV + "eV" + occur_duration + "sec_per" + occur_period + "t_max" + accele_t_max + "sec.png")
 plt.show()

@@ -19,7 +19,7 @@ const ion_type ion = oxygen;
 const double electric_field = 1.0e-3;
 const double init_v_perp_eV = 0.1;
 const double init_v_para_eV = 0.1;
-const double max_v_para_for_resonance_eV = 100.0;
+const double max_v_para_for_resonance_eV = 10.0;
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
 const double accele_t_max = 9999.0;
@@ -85,7 +85,7 @@ int main() {
     std::ofstream ofs_t("./data/result_t.csv");
     ofs_t << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,inval_lat" << std::endl;
     std::ofstream ofs_x("./data/result_x.csv");
-    ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,inval_lat" << std::endl;
+    ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,energy,energy_density,inval_lat" << std::endl;
 
     
     while (t < T) {
@@ -134,7 +134,7 @@ int main() {
                 firstcount_for_grid += 1;
             }
 
-            ofs_x << x_para_grid/1e3 << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << inval_lat/3.141592*180.0 << std::endl;
+            ofs_x << x_para_grid/1e3 << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << v_para_eV+v_perp_eV << "," << (v_para_eV+v_perp_eV)*t_per_para_grid/first_t_per_para_grid << "," << inval_lat/3.141592*180.0 << std::endl;
             x_para_grid += dx_para_grid;
 
             while (x_para>x_para_grid)
