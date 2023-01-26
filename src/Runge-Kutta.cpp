@@ -22,6 +22,7 @@ const double init_v_para_eV = 0.1;
 const double max_v_para_for_resonance_eV = 100.0;
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
+const double accele_t_max = 9999.0;
 //Graphs_file_No_name_param
 const double L_shell = 10.0;
 const double init_Inval_lat_deg = 70.0;
@@ -59,7 +60,7 @@ double dv_para(double v_perp, double v_para, double inval_lat) {
 
 double dv_perp(double v_perp, double v_para, double t, double inival_lat) {
     double dv_perp_val = electric_acceleration - v_para / v_perp * dv_para(v_perp, v_para, inival_lat);
-    if(v_para>max_v_para_for_resonance||fmod(t,occur_period)>occur_duration){
+    if((v_para>max_v_para_for_resonance||fmod(t,occur_period)>occur_duration)||accele_t_max<t){
         dv_perp_val = - v_para / v_perp * dv_para(v_perp, v_para, inival_lat);
     }
     return dv_perp_val;
@@ -149,7 +150,7 @@ int main() {
 
     //Send parameter to Python
     int outdigit = 2;
-    std::stringstream ss1, ss2, ss3, ss4, ss5, ss6;
+    std::stringstream ss1, ss2, ss3, ss4, ss5, ss6, ss7;
     ss1 << std::fixed << std::setprecision(outdigit) << init_v_para_eV;
     std::string init_v_para_ev_str =ss1.str(); 
     ss2 << std::fixed << std::setprecision(outdigit) << init_v_perp_eV;
@@ -162,6 +163,8 @@ int main() {
     std::string occur_duration_str =ss5.str(); 
     ss6 << std::fixed << std::setprecision(outdigit) << occur_period;
     std::string occur_period_str =ss6.str(); 
+    ss7 << std::fixed << std::setprecision(outdigit) << accele_t_max;
+    std::string accele_t_max_str =ss7.str(); 
 
     std::ofstream ofs("./data/params.txt");
     ofs << ion.name << std::endl;
@@ -171,6 +174,7 @@ int main() {
     ofs << electric_field_str << std::endl;
     ofs << occur_duration_str << std::endl;
     ofs << occur_period_str << std::endl;
+    ofs << accele_t_max_str << std::endl;
     ofs.close();
 
 

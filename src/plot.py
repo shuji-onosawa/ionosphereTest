@@ -12,6 +12,7 @@ max_v_para_for_resonance_eV = paramlist[3]
 electric_field = paramlist[4]
 occur_duration = paramlist[5]
 occur_period = paramlist[6]
+accele_t_max = paramlist[7]
 
 dft = pd.read_csv('./data/result_t.csv')
 dfx = pd.read_csv('./data/result_x.csv')
@@ -111,9 +112,10 @@ ax10.yaxis.set_ticks_position('right')
 ax10.yaxis.set_tick_params(labelright=True)
 
 fig.legend(loc='upper left')
-plt.suptitle(ion_name + " " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV + 'eV,\
-    \nmax_v_para_for_resonance = ' + max_v_para_for_resonance_eV + "eV, Wave occurs for " + occur_duration + "sec during " + occur_period + "sec")
+plt.suptitle(ion_name + " " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV +
+             'eV, max_v_para_for_resonance = ' + max_v_para_for_resonance_eV + "eV,\nWave occurs for " + occur_duration + "sec during " +
+             occur_period + "sec, " + "accleration_time_max" + accele_t_max + 'sec')
 plt.subplots_adjust(wspace=0.4, hspace=0.4)
 plt.savefig('./graphs/' + ion_name + electric_field + 'mVm_' + 'init_v_para_' + init_v_para_eV + 'eV_init_v_perp_' + init_v_perp_eV +
-            'eV_max_resonance_' + max_v_para_for_resonance_eV + "eV" + occur_duration + "sec_per" + occur_period + "sec.png")
+            'eV_max_resonance_' + max_v_para_for_resonance_eV + "eV" + occur_duration + "sec_per" + occur_period + "t_max" + accele_t_max + "sec.png")
 plt.show()
