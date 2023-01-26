@@ -86,8 +86,9 @@ int main() {
     std::ofstream ofs_x("./data/result_x.csv");
     ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,inval_lat" << std::endl;
 
-    //RK4
+    
     while (t < T) {
+        //RK4
         double k1_perp = dv_perp(v_perp, v_para, t, inval_lat);
         double k1_para = dv_para(v_perp, v_para, inval_lat);
 

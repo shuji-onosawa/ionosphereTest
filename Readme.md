@@ -21,6 +21,8 @@ You need
 
 We develop this code using WSL2, so if you use other OS or environment, you should rewrite some code.
 
+I use https://qiita.com/firedfly/items/00c34018581c6cec9b84 for clean Python code.
+
 ---
 
 ## Run
