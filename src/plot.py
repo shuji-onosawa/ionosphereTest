@@ -144,7 +144,7 @@ ax16.yaxis.set_tick_params(labelright=True)
 
 
 fig.legend(loc='upper left')
-plt.suptitle(ion_name + " " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV +
+plt.suptitle(ion_name + ", " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV +
              'eV, max_v_para_for_resonance = ' + max_v_para_for_resonance_eV + "eV,\nWave occurs for " + occur_duration + "sec during " +
              occur_period + "sec, " + "accleration_time_max" + accele_t_max + 'sec')
 plt.subplots_adjust(wspace=0.5, hspace=0.4)

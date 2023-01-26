@@ -83,7 +83,7 @@ ax1bar = fig.colorbar(mappable2, ax=ax2, orientation="vertical")
 ax1.set_label("density")
 
 
-plt.suptitle(ion_name + " " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV +
+plt.suptitle(ion_name + ", " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV +
              'eV, max_v_para_for_resonance = ' + max_v_para_for_resonance_eV + "eV,\nWave occurs for " + occur_duration + "sec during " +
              occur_period + "sec, " + "accleration_time_max" + accele_t_max + 'sec, ' + 'x_max = ' + x_max + 'km x_min = ' + x_min + 'km')
 plt.subplots_adjust(wspace=0.5, hspace=0.4)
