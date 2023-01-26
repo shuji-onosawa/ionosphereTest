@@ -25,10 +25,13 @@ We develop this code using WSL2, so if you use other OS or environment, you shou
 
 ## Run
 
+on VSCode
+
 Build and run → Ctrl + Shift + B
 
-
 if you want debug, you push f5 key.
+
+You can read markdown text with Ctrl+k→v
 
 ---
 
