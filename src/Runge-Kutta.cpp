@@ -85,7 +85,7 @@ int main() {
     std::ofstream ofs_t("./data/result_t.csv");
     ofs_t << "time,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,inval_lat" << std::endl;
     std::ofstream ofs_x("./data/result_x.csv");
-    ofs_x << "x,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,energy,energy_density,inval_lat" << std::endl;
+    ofs_x << "x,time,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,energy,energy_density,inval_lat" << std::endl;
 
     
     while (t < T) {
@@ -134,7 +134,7 @@ int main() {
                 firstcount_for_grid += 1;
             }
 
-            ofs_x << x_para_grid/1e3 << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << v_para_eV+v_perp_eV << "," << (v_para_eV+v_perp_eV)*t_per_para_grid/first_t_per_para_grid << "," << inval_lat/3.141592*180.0 << std::endl;
+            ofs_x << x_para_grid/1e3 << "," << t << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << v_para_eV+v_perp_eV << "," << (v_para_eV+v_perp_eV)*t_per_para_grid/first_t_per_para_grid << "," << inval_lat/3.141592*180.0 << std::endl;
             x_para_grid += dx_para_grid;
 
             while (x_para>x_para_grid)
