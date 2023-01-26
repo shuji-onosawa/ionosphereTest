@@ -179,7 +179,7 @@ int main() {
 
 
     //Execute Python
-    std::string command = "/bin/python3 ./src/plot.py ";
+    std::string command = "python3 ./src/plot.py ";
     std::system(command.c_str());
 
     return 0;
