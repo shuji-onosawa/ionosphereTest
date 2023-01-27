@@ -67,7 +67,7 @@ for i in range(len(pitch_angles) - 1):
             relative_density_sums[i][j] += row["relative_density"]
 
 
-t_plot = [i * dt for i in range(2 * n)]
+t_plot = [t_min + i * dt for i in range(2 * n)]
 pitch_angles.pop(len(pitch_angles) - 1)
 
 if wantLog:
