@@ -5,12 +5,13 @@ import matplotlib.colors
 
 # Parameter///////////////////////////
 wantLog = False
-distance_accele_area_up = 4000  # Height from obeservation point to accleration area upper limit(km)
-distance_accele_area_low = 5000  # Height from obeservation point to accleration area lower limit(km)
+distance_accele_area_up = 500  # Height from obeservation point to accleration area upper limit(km)
+distance_accele_area_low = 2000  # Height from obeservation point to accleration area lower limit(km)
 # Warining! You have to distance_accele_area_up<distance_accele_area_low
 # Because These are distance *from obseravation area*
 dt = 0.1
 acceleration_time = 20
+observe_time = 20
 # ////////////////////////////////////
 
 
@@ -49,7 +50,8 @@ t_max = t_min + acceleration_time
 # t_min+n*dt, t_min+dtからt_min+n*dt, t_min+2*dtからt_min+n*dt, t_min+3*dtから
 # t_min+n*dt......t_min*(n-1)+dtからt_min+n*dtまでのそれぞれについての、
 # pitch_angleが0-10, 10-20, 20-30, 30-40, 40-50, 50-60, 60-70, 70-80, 80-90それぞれにおけるrelative_densityの和を求める
-n = int((t_max - t_min) / dt) + 1  # nの定義
+n = int(observe_time / dt) + 1  # nの定義
+nt_acc = int((t_max - t_min) / dt) + 1
 
 relative_density_sums = [[0 for _ in range(2 * n)] for _ in range(len(pitch_angles) - 1)]
 energy_density_sums = [[0 for _ in range(2 * n)] for _ in range(len(pitch_angles) - 1)]
@@ -57,8 +59,8 @@ energy_density_sums = [[0 for _ in range(2 * n)] for _ in range(len(pitch_angles
 
 for i in range(len(pitch_angles) - 1):
     for j in range(2 * n):
-        t_min_j = max(t_min + j * dt - n * dt, 0)
-        t_max_j = min(t_min + j * (dt + 1), t_max)
+        t_min_j = max(t_min + j * dt - nt_acc * dt, 0)
+        t_max_j = min(t_min + (j + 1) * dt, t_min + observe_time)
         for index, row in df[(t_min_j <= df["time"]) &
                              (df["time"] < t_max_j) &
                              (pitch_angles[i] <= df["pitch_angle"]) &
