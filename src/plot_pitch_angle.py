@@ -85,9 +85,9 @@ ax1.set_label("density")
 
 plt.suptitle(ion_name + ", " + electric_field + 'mV/m,' + ' init_v_para = ' + init_v_para_eV + 'eV, init_v_perp = ' + init_v_perp_eV +
              'eV, max_v_para_for_resonance = ' + max_v_para_for_resonance_eV + "eV,\nWave occurs for " + occur_duration + "sec during " +
-             occur_period + "sec, " + "accleration_time_max" + accele_t_max + 'sec, ' + 'x_max = ' + x_max + 'km x_min = ' + x_min + 'km')
+             occur_period + "sec, " + "accleration_time_max" + accele_t_max + 'sec, ' + 'x_max = ' + str(x_max) + 'km x_min = ' + str(x_min) + 'km')
 plt.subplots_adjust(wspace=0.5, hspace=0.4)
 plt.savefig('./graphs/pitch_angle' + ion_name + electric_field + 'mVm_' + 'init_v_para_' + init_v_para_eV + 'eV_init_v_perp_' + init_v_perp_eV +
             'eV_max_resonance_' + max_v_para_for_resonance_eV + "eV" + occur_duration + "sec_per" + occur_period + "t_max" + accele_t_max +
-            "sec" + 'x_max_' + x_max + 'x_min_' + x_min + '.png')
+            "sec" + 'x_max_' + str(x_max) + 'x_min_' + str(x_min) + '.png')
 plt.show()
