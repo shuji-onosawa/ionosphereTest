@@ -38,6 +38,7 @@ ax3_2.set_ylabel('Pitch Angle')
 ax3_3 = ax3.twinx()
 ax3_3.plot(x_data['x'], x_data['relative_density'], 'g', label='')
 ax3_3.set_ylabel('relative_density')
+
 # Plot data on ax4 (log scale)
 ax4.semilogx(x_data['x'], x_data['v_perp_eV'], label='')
 ax4.semilogx(x_data['x'], x_data['v_para_eV'], label='')
@@ -60,7 +61,6 @@ ax5_2.plot(x_data['x'], x_data['energy_density'], 'm', label='energy_density')
 ax5_2.set_ylabel('Energy density')
 
 # Plot data on ax6 (log scale)
-
 ax6.semilogx(x_data['x'], x_data['energy'], 'c', label='')
 ax6.set_xlabel('X (km)')
 ax6.set_ylabel('Energy (eV)')
