@@ -11,7 +11,7 @@ distance_accele_area_low = 2000  # Height from obeservation point to accleration
 # Because These are distance *from obseravation area*
 dt = 0.1
 acceleration_time = 20
-observe_time = 20
+observe_time = 20  # 観測時間
 # ////////////////////////////////////
 
 
