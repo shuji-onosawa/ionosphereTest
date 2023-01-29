@@ -69,6 +69,7 @@ double dv_perp(double v_perp, double v_para, double t, double inival_lat) {
 int main() {
     double v_perp = init_v_perp;
     double v_para = init_v_para;
+    double v_para_prev_x = init_v_para;
     double t = 0.0;
     double inval_lat = init_Inval_lat;
     int write_out_count = 0;
@@ -79,6 +80,7 @@ int main() {
     double dx_para = 0.0;
     double t_per_para_grid = 0.0;
     double first_t_per_para_grid = 0.0;
+    double first_v_para = 0.0;
     int firstcount_for_grid = 0;
     
 
@@ -130,17 +132,27 @@ int main() {
         t_per_para_grid += dt;
         if(x_para>x_para_grid){
             if(firstcount_for_grid == 0){
-                first_t_per_para_grid = t_per_para_grid; //For normalize t_per_para_grid
+                first_t_per_para_grid = t_per_para_grid;
+                first_v_para = fabs(v_para);
                 firstcount_for_grid += 1;
             }
 
-            ofs_x << x_para_grid/1e3 << "," << t << "," << t_per_para_grid/first_t_per_para_grid << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << v_para_eV+v_perp_eV << "," << (v_para_eV+v_perp_eV)*t_per_para_grid/first_t_per_para_grid << "," << inval_lat/3.141592*180.0 << std::endl;
             x_para_grid += dx_para_grid;
-
+            int proceed_count = 1;
             while (x_para>x_para_grid)
             {
                 x_para_grid += dx_para_grid;
+                proceed_count++;
             }
+            double dv_paradx = abs(v_para-v_para_prev_x);
+            
+            ofs_x << x_para_grid/1e3 << "," << t << "," << 1.0/(v_para/first_v_para) << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << v_para_eV+v_perp_eV << "," << (v_para_eV+v_perp_eV)*t_per_para_grid/first_t_per_para_grid << "," << inval_lat/3.141592*180.0 << std::endl;
+            // flux = constant, so 1/v_para = relative_density, I think
+
+            // prev ver relative_density (It's wrong)
+            // t_per_para_grid/first_t_per_para_grid
+
+            v_para_prev_x = v_para;
             t_per_para_grid = 0.0;
         }
 
