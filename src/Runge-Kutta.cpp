@@ -8,27 +8,29 @@ typedef struct
 {
   char name[20];  
   double mass;
+  double charge;
 } ion_type;
-const double massunit = 1.6e-27;
-const ion_type oxygen{"oxygen",16.0*massunit};
-const ion_type proton{"proton",1.0*massunit};
+const double massunit = 1.67e-27;
+const double chargeunit = 1.6e-19;
+const ion_type oxygen{"oxygen",16.0*massunit,8.0*chargeunit};
+const ion_type proton{"proton",1.0*massunit,chargeunit};
 
 ////Parameter
 //Graphs_file_name_param
 const ion_type ion = oxygen;
 const double electric_field = 1.0e-3;
-const double init_v_perp_eV = 0.1;
-const double init_v_para_eV = 0.1;
-const double max_v_para_for_resonance_eV = 10.0;
+const double init_v_perp_eV = 0.01;
+const double init_v_para_eV = 0.01;
+const double max_v_para_for_resonance_eV = 0.1;
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
 const double accele_t_max = 9999.0;
 //Graphs_file_No_name_param
 const double L_shell = 10.0;
-const double init_Inval_lat_deg = 70.0;
+const double init_Inval_lat_deg = 75.0;
 const double dx_para_grid = 1e3;//(m)
 const double dt = 0.001;//(s)
-const double T = 300.0;//(s)
+const double T = 600.0;//(s) // Simulation duration
 const int write_out_times = 10; // How many calculations do you write once (for time plot)?
 const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decrease invalid latitude. if this is 0, no effect.
 ////
@@ -36,7 +38,7 @@ const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decre
 
 //Input value adjustment
 const double mass = ion.mass;
-const double electric_acceleration = electric_field*1.6e-19/mass;
+const double electric_acceleration = electric_field*ion.charge/mass;
 const double init_v_perp = sqrt(init_v_perp_eV*(1.60218e-19)*2.0/mass);
 const double init_v_para = sqrt(init_v_para_eV*(1.60218e-19)*2.0/mass);
 const double max_v_para_for_resonance = sqrt(max_v_para_for_resonance_eV*(1.60218e-19)*2.0/mass);

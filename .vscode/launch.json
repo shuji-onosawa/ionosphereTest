@@ -5,7 +5,7 @@
             "name": "C++ Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Runge-Kutta.out",
+            "program": "${workspaceFolder}/execute/Runge-Kutta.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

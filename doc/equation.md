@@ -98,7 +98,7 @@ Mirror Force is...
 $m\frac{dv_\parallel}{dt} = \mu \nabla_\parallel B$
 
 
-$m\frac{dv_\parallel}{dt} = \frac{1}{2B}m v_\perp \nabla_\parallel B$
+$m\frac{dv_\parallel}{dt} = \frac{1}{2B}m v_\perp^2 \nabla_\parallel B$
 
 
 $\frac{dv_\parallel}{dt} = v_\perp^2\frac{1}{2}  \frac{1}{R_EL}\frac{3\sin\lambda(5\sin^2\lambda^2+3)}{\cos^{2}\lambda(1+3\sin^2\lambda)^{\frac{3}{2}}}$ 
