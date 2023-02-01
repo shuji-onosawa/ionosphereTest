@@ -21,7 +21,7 @@ const ion_type ion = oxygen;
 const double electric_field = 1.0e-3;
 const double init_v_perp_eV = 0.01;
 const double init_v_para_eV = 0.01;
-const double max_v_para_for_resonance_eV = 0.1;
+const double max_v_para_for_resonance_eV = 0.1;//速度で比較するために、プロトンを基準に設定。ここのパラメータだけは、入力エネルギーに対して。酸素だろうとプロトンの質量をもとに上限v_paraを設定。
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
 const double accele_t_max = 9999.0;
@@ -41,7 +41,7 @@ const double mass = ion.mass;
 const double electric_acceleration = electric_field*ion.charge/mass;
 const double init_v_perp = sqrt(init_v_perp_eV*(1.60218e-19)*2.0/mass);
 const double init_v_para = sqrt(init_v_para_eV*(1.60218e-19)*2.0/mass);
-const double max_v_para_for_resonance = sqrt(max_v_para_for_resonance_eV*(1.60218e-19)*2.0/mass);
+const double max_v_para_for_resonance = sqrt(max_v_para_for_resonance_eV*(1.60218e-19)*2.0/massunit);
 const double R_e = 6.3e6;
 const double init_Inval_lat = init_Inval_lat_deg/180.0*3.141592;
 
