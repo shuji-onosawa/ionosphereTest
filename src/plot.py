@@ -86,10 +86,10 @@ plt.suptitle(title_format.format(ion_name, electric_field, init_v_para_eV, init_
              occur_duration, occur_period, accele_t_max))
 plt.subplots_adjust(wspace=0.5, hspace=0.4)
 
+fig.legend(loc='upper left')
 file_name_format = "./graphs/{}_{}mVm_init_v_para_{}eV_init_v_perp_{}eV_max_resonance_{}eV_{}sec_per_{}t_max_{}sec.png"
 plt.savefig(file_name_format.format(ion_name, electric_field, init_v_para_eV, init_v_perp_eV, max_v_para_for_resonance_eV,
             occur_duration, occur_period, accele_t_max))
 
-fig.legend(loc='upper left')
 plt.subplots_adjust(wspace=0.5, hspace=0.4)
 plt.show()
