@@ -12,7 +12,7 @@ typedef struct
 } ion_type;
 const double massunit = 1.67e-27;
 const double chargeunit = 1.6e-19;
-const ion_type oxygen{"oxygen",16.0*massunit,8.0*chargeunit};
+const ion_type oxygen{"oxygen",16.0*massunit,chargeunit};
 const ion_type proton{"proton",1.0*massunit,chargeunit};
 
 ////Parameter
