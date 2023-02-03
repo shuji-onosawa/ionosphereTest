@@ -21,7 +21,7 @@ const ion_type ion = oxygen;
 const double electric_field = 1.0e-3;
 const double init_v_perp_eV = 0.01;
 const double init_v_para_eV = 0.01;
-const double max_v_para_for_resonance_eV = 10.0;//速度で比較するために、プロトンを基準に設定。ここのパラメータだけは、入力エネルギーに対して。酸素だろうとプロトンの質量をもとに上限v_paraを設定。
+const double max_v_para_for_resonance_eV = 0.3;//速度で比較するために、プロトンを基準に設定。ここのパラメータだけは、入力エネルギーに対して。酸素だろうとプロトンの質量をもとに上限v_paraを設定。
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
 const double accele_t_max = 9999.0;
@@ -34,7 +34,7 @@ const double T = 120.0;//(s) // Simulation duration
 const int write_out_times = 10; // How many calculations do you write once (for time plot)?
 const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decrease invalid latitude. if this is 0, no effect.
 ///// Test_parameter
-const double B_amplitude = 1e-10;
+const double B_amplitude = 0.0;
 ////
 
 
