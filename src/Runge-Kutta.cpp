@@ -76,7 +76,7 @@ double dlambda(double inval_lat){
 //Calculation
 double dv_para(double v_perp, double v_para, double t, double inval_lat) {
     double B_wave = apply_magnetic_field(v_para, t);
-    return 1.0/(1.0 - B_wave/ion.mass*v_para/v_perp) * (grad_field(inval_lat) * 0.5 * pow(v_perp, 2.0) + B_wave/ion.mass*apply_electric_acceleration(v_para,t));
+    return 1.0/(1.0 - ion.charge * B_wave/ion.mass*v_para/v_perp) * (grad_field(inval_lat) * 0.5 * pow(v_perp, 2.0) + ion.charge * B_wave/ion.mass*apply_electric_acceleration(v_para,t));
 }
 
 double dv_perp(double v_perp, double v_para, double t, double inival_lat) {
