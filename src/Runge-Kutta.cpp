@@ -108,7 +108,7 @@ int main() {
     ofs_x << "x,time,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,energy,energy_density,inval_lat" << std::endl;
 
     
-    while (t < T && v_perp > 0.0) {
+    while (t < T && v_perp > 0.0) { // v_perp<0で止める
         //RK4
         double k1_perp = dv_perp(v_perp, v_para, t, inval_lat);
         double k1_para = dv_para(v_perp, v_para, t,inval_lat);
