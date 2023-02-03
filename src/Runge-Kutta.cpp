@@ -108,7 +108,7 @@ int main() {
     ofs_x << "x,time,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,energy,energy_density,inval_lat" << std::endl;
 
     
-    while (t < T) {
+    while (t < T && v_perp > 0.0) {
         //RK4
         double k1_perp = dv_perp(v_perp, v_para, t, inval_lat);
         double k1_para = dv_para(v_perp, v_para, t,inval_lat);
@@ -175,6 +175,11 @@ int main() {
         }
 
     }
+
+    if(v_perp<0.0){
+        std::cout<<"Simulation is stopped because v_perp<0"<<"\n";
+    }
+
     ofs_t.close();
     ofs_x.close();
 
