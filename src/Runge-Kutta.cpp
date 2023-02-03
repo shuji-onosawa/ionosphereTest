@@ -24,7 +24,7 @@ const double init_v_para_eV = 0.01;
 const double max_v_para_for_resonance_eV = 10.0;//速度で比較するために、プロトンを基準に設定。ここのパラメータだけは、入力エネルギーに対して。酸素だろうとプロトンの質量をもとに上限v_paraを設定。
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
-const double accele_t_max = 9998.0;
+const double accele_t_max = 9987.0;
 //Graphs_file_No_name_param
 const double L_shell = 10.0;
 const double init_Inval_lat_deg = 75.0;
@@ -34,7 +34,7 @@ const double T = 120.0;//(s) // Simulation duration
 const int write_out_times = 10; // How many calculations do you write once (for time plot)?
 const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decrease invalid latitude. if this is 0, no effect.
 ///// Test_parameter
-const double B_amplitude = 1e-10;
+const double B_amplitude = 0.0;
 ////
 
 
@@ -60,7 +60,7 @@ double apply_electric_acceleration(double v_para,double t){
 }
 
 double apply_magnetic_field(double v_para,double t){
-    return apply_field(B_amplitude, v_para, t);
+    return B_amplitude;//apply_field(B_amplitude, v_para, t);
 }
 
 double grad_field(double inval_lat){
@@ -76,7 +76,7 @@ double dlambda(double inval_lat){
 //Calculation
 double dv_para(double v_perp, double v_para, double t, double inval_lat) {
     double B_wave = apply_magnetic_field(v_para, t);
-    return 1.0/(1.0 - ion.charge * B_wave/ion.mass*v_para/v_perp) * (grad_field(inval_lat) * 0.5 * pow(v_perp, 2.0) + ion.charge * B_wave/ion.mass*apply_electric_acceleration(v_para,t));
+    return grad_field(inval_lat) * 0.5 * pow(v_perp, 2.0) + ion.charge * B_wave/ion.mass * v_perp;
 }
 
 double dv_perp(double v_perp, double v_para, double t, double inival_lat) {
