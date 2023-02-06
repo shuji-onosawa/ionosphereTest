@@ -21,7 +21,7 @@ print(dvmirror)
 print(oxigen_charge / oxigen_mass * 1e-9)
 
 ##################################
-calc_vel = 1.5e4
+calc_vel = 6.0e3 / 3.5
 eV = 0.5 * oxigen_mass * calc_vel * calc_vel / 1.6021e-19
 print(eV)
 

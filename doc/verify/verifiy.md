@@ -56,11 +56,14 @@ x = 37868km
 
 ---
 
-$B_{wave} = 10^{-9}$ T
+$B_{wave} = 10^{-10}$ T
 
 max resonance
-$\frac{dv_\parallel}{dt} = \frac{qv_\perp B_{wave}}{m} = 6.0*10^{-3}v_\perp$
+$\frac{dv_\parallel}{dt} = \frac{qv_\perp B_{wave}}{m} = 6.0*10^{-4}v_\perp$
 
 $\frac{dv}{dt}_{mirror} = \nabla{B}/B\frac{1}{2}v_\perp^2 = 3.5*10^{-7}v_\perp^2$
 
-$$
+if
+$\frac{dv}{dt}_{mirror} = \frac{dv_\parallel}{dt}$
+
+0.2eV

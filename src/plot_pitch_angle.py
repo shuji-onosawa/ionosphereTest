@@ -11,8 +11,8 @@ def initialize_parameters():
     params['upper_distance_acceleration_area'] = 100  # km
     params['lower_distance_acceleration_area'] = 7000  # km
     params['dt'] = 0.1
-    params['acceleration_time'] = 20
-    params['observe_time'] = 40
+    params['acceleration_time'] = 100
+    params['observe_time'] = 300
     return params
 
 
