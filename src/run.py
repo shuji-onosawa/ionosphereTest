@@ -14,9 +14,10 @@ folderlists = []
 
 # Increase electric_field_mV/m by 0.01 for 10 times
 angles = 0.5 * np.pi
-for i in range(8):
+divnum = 12
+for i in range(divnum):
     n = 3  # 切り捨てしたい桁
-    val = math.floor(0.3 * (np.cos(np.pi / 180.0 * (i + 0.5) * 10.0)) * 10 ** n) / (10 ** n)
+    val = math.floor(0.3 * (np.cos(np.pi / 180.0 * 90 / (divnum + 1) + (divnum + 1))) * 10 ** n) / (10 ** n)
     params["electric_field_mV/m"] = val
     with open("./src/params.json", "w") as f:
         json.dump(params, f, indent=4, separators=(',', ': '))

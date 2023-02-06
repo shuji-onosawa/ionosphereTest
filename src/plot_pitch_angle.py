@@ -128,53 +128,53 @@ axs = axs.flatten()
 
 # relative_density_sums_angをカラープロットします
 # axs[0].set_title('Graph1:ang_density')
-mappable1 = axs[0].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang)
+mappable0 = axs[0].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang)
 axs[0].set_xlabel('t')
 axs[0].set_ylabel('pitch_angle')
-fig.colorbar(mappable1, ax=axs[0], orientation="vertical")
+fig.colorbar(mappable0, ax=axs[0], orientation="vertical")
 axs[0].set_label("erg_density")
 
 relative_density_sums_ang = np.array(relative_density_sums_ang) + 1e-10
-mappable1 = axs[3].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang, norm=matplotlib.colors.LogNorm())
+mappable3 = axs[3].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang, norm=matplotlib.colors.LogNorm())
 axs[3].set_xlabel('t')
 axs[3].set_ylabel('pitch_angle')
-fig.colorbar(mappable1, ax=axs[0], orientation="vertical")
+fig.colorbar(mappable3, ax=axs[3], orientation="vertical")
 axs[3].set_label("erg_density")
 
 
 # relative_density_sums_perpをカラープロットします
 # axs[1].set_title('Graph2:perp_density')
-mappable2 = axs[1].pcolormesh(t_plot, v_perps, relative_density_sums_perp)
+mappable1 = axs[1].pcolormesh(t_plot, v_perps, relative_density_sums_perp)
 axs[1].set_xlabel('time')
 axs[1].set_ylabel('v_perp_eV')
 axs[1].set_yscale('log')
-fig.colorbar(mappable2, ax=axs[1], orientation="vertical")
+fig.colorbar(mappable1, ax=axs[1], orientation="vertical")
 axs[1].set_label("density")
 
 relative_density_sums_perp = np.array(relative_density_sums_perp) + 1e-10
-mappable2 = axs[4].pcolormesh(t_plot, v_perps, relative_density_sums_perp, norm=matplotlib.colors.LogNorm())
+mappable4 = axs[4].pcolormesh(t_plot, v_perps, relative_density_sums_perp, norm=matplotlib.colors.LogNorm())
 axs[4].set_xlabel('time')
 axs[4].set_ylabel('v_perp_eV')
 axs[4].set_yscale('log')
-fig.colorbar(mappable2, ax=axs[1], orientation="vertical")
+fig.colorbar(mappable4, ax=axs[4], orientation="vertical")
 axs[4].set_label("density")
 
 
 # relative_density_sums_paraをカラープロットします
 # axs[2].set_title('Graph3:para_density')
-mappable3 = axs[2].pcolormesh(t_plot, v_paras, relative_density_sums_para)
+mappable2 = axs[2].pcolormesh(t_plot, v_paras, relative_density_sums_para)
 axs[2].set_xlabel('t')
 axs[2].set_ylabel('v_para_eV')
 axs[2].set_yscale('log')
-fig.colorbar(mappable3, ax=axs[2], orientation="vertical")
+fig.colorbar(mappable2, ax=axs[2], orientation="vertical")
 axs[2].set_label("density")
 
 relative_density_sums_para = np.array(relative_density_sums_para) + 1e-10
-mappable3 = axs[5].pcolormesh(t_plot, v_paras, relative_density_sums_para(), norm=matplotlib.colors.LogNorm())
+mappable5 = axs[5].pcolormesh(t_plot, v_paras, relative_density_sums_para, norm=matplotlib.colors.LogNorm())
 axs[5].set_xlabel('t')
 axs[5].set_ylabel('v_para_eV')
 axs[5].set_yscale('log')
-fig.colorbar(mappable3, ax=axs[2], orientation="vertical")
+fig.colorbar(mappable5, ax=axs[5], orientation="vertical")
 axs[5].set_label("density")
 
 
