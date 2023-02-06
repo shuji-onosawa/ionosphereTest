@@ -35,6 +35,15 @@ $\frac{dv}{dt}_E = 598$
 
 $\frac{dv}{dt}_{mirror} \approx \frac{dv}{dt}_E$
 
+
+$\nabla{B}/B\frac{1}{2}v_\perp^2 = \frac{qE}{m}$
+
+$\frac{\frac{1}{2}mv_\perp^2}{E} = \frac{q}{\nabla{B}/B}$
+
+$\frac{\frac{1}{2}mv_\perp^2[eV]}{E} = \frac{1}{\nabla{B}/B}$
+
+$\frac{E}{\frac{1}{2}mv_\perp^2[eV]} = \nabla{B}/B$
+
 ---
 
 energy is constant after acceleration
