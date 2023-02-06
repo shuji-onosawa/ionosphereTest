@@ -21,7 +21,7 @@ $\alpha \approx 30°$
 
 ---
 
-0.1mV/m, $enery \approx 150.0eV$ at oxigen
+0.1mV/m, $v_\perp \approx 150.0eV$ at oxigen
 
 $\frac{dv}{dt}_{mirror} = \nabla{B}/B\frac{1}{2}v_\perp^2$
 
