@@ -8,8 +8,8 @@ def initialize_parameters():
     """ Initialize the parameters used in the script. """
     params = {}
     params['want_log'] = False
-    params['upper_distance_acceleration_area'] = 500  # km
-    params['lower_distance_acceleration_area'] = 700  # km
+    params['upper_distance_acceleration_area'] = 100  # km
+    params['lower_distance_acceleration_area'] = 7000  # km
     params['dt'] = 0.1
     params['acceleration_time'] = 20
     params['observe_time'] = 40
@@ -71,7 +71,7 @@ for i in range(len(pitch_angles) - 1):
                          (df["pitch_angle"] < pitch_angles[i + 1])]
         
         # Sum relative density and energy density for current iteration
-        energy_density_sums[i][j] = filtered_df["energy_density"].sum()
+        energy_density_sums[i][j] = filtered_df["relative_density"].sum()
         relative_density_sums[i][j] = filtered_df["relative_density"].sum()
 
 # Create list of times for plot
