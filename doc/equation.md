@@ -168,3 +168,19 @@ $= \frac{\mu_0 M_E}{4\pi}\frac{1}{R_E^3L^3(R_EL)}\frac{3\sin\lambda(5\sin^2\lamb
 
 
 $=\frac{1}{R_EL}\frac{3\sin\lambda(5\sin^2\lambda^2+3)}{\cos^{2}\lambda(1+3\sin^2\lambda)^{\frac{3}{2}}}$ 
+
+The first equation is the formula for the magnetic field (B) of a magnetic dipole at a certain radial distance (R) from the center of the Earth. $M_E$ is the Earth's magnetic moment, $\mu_0$ is the vacuum permeability, $\lambda$ is the invariant latitude (angle between the magnetic field vector and the Earth's surface), and $L$ is the L-shell (a measure of the radial distance from the center of the Earth).
+
+The second equation is the formula for the derivative of the magnetic field along the radial direction (parallel to the radial direction), which is referred to as $\nabla_\parallel B$. The derivative is calculated by taking the partial derivative of the magnetic field with respect to the invariant latitude ($\frac{dB}{d\lambda}$) and multiplying it by the reciprocal of the derivative of the invariant latitude with respect to the radial distance along the Earth's surface ($(\frac{ds}{d\lambda})^{-1}$).
+
+The third equation is an expression for the derivative of the invariant latitude with respect to the radial distance along the Earth's surface.
+
+Finally, the last equation is the ratio of the derivative of the magnetic field along the radial direction to the magnetic field itself. This equation can be used to determine the relative variation of the magnetic field along the radial direction.
+
+Methods:
+
+In this study, we calculated the gradient of the magnetic field, $\nabla_\parallel B$, in a dipole magnetic field. The magnetic field, $B$, was first expressed as a function of the invariant latitude, $\lambda$, L-shell, $L$, and Earth's radius, $R_E$. The gradient of the magnetic field was then calculated by taking the derivative of $B$ with respect to $\lambda$.
+
+To obtain this derivative, we first calculated $\frac{ds}{d\lambda}$, the derivative of the distance along a field line with respect to the invariant latitude. We then calculated $\frac{dB}{d\lambda}$ and expressed the gradient of the magnetic field, $\nabla_\parallel B$, as the product of $\frac{dB}{d\lambda}$ and $(\frac{ds}{d\lambda})^{-1}$. The resulting expression for $\nabla_\parallel B$ was further simplified and expressed as a function of $\lambda$.
+
+Finally, we expressed the ratio of the gradient of the magnetic field to the magnetic field itself, $\frac{\nabla_\parallel B}{B}$, in terms of $\lambda$.
