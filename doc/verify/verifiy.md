@@ -21,13 +21,19 @@ $\alpha \approx 30°$
 
 ---
 
-1mV/m, $max \approx 800.0eV$ at oxigen, accletime = 2.0seconds
+0.1mV/m, $enery \approx 150.0eV$ at oxigen
 
-$m\frac{dv}{dt} = qE$
+$\frac{dv}{dt}_{mirror} = \nabla{B}/B\frac{1}{2}v_\perp^2$
 
-$v = \frac{qE}{m}t$
+$m\frac{dv}{dt}_E = qE$
 
-$\frac{1}{2}mv^2 = 766eV$
+$\frac{dv}{dt}_E = \frac{qE}{m}$
+
+$\frac{dv}{dt}_{mirror} = 628$
+
+$\frac{dv}{dt}_E = 598$
+
+$\frac{dv}{dt}_{mirror} \approx \frac{dv}{dt}_E$
 
 ---
 
@@ -40,3 +46,12 @@ $v_\parallel$ is 60000m/s at almost time, and run simulation 600 seconds
 x = 37868km
 
 ---
+
+$B_{wave} = 10^{-9}$ T
+
+max resonance
+$\frac{dv_\parallel}{dt} = \frac{qv_\perp B_{wave}}{m} = 6.0*10^{-3}v_\perp$
+
+$\frac{dv}{dt}_{mirror} = \nabla{B}/B\frac{1}{2}v_\perp^2 = 3.5*10^{-7}v_\perp^2$
+
+$$
