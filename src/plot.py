@@ -4,7 +4,7 @@ import json
 import os
 import shutil
 
-# Get parameter from c++
+# Get parameter from json
 json_open = open("./src/params.json", 'r')
 paramlist = json.load(json_open)
 
@@ -17,6 +17,7 @@ occur_duration = paramlist["occur_duration"]
 occur_period = paramlist["occur_period"]
 accele_t_max = paramlist["accele_t_max"]
 folder_ver = paramlist["folder_ver"]
+display_fig = paramlist["display_fig"]
 title_format = "{}, {} mV/m, init_v_para = {} eV, init_v_perp = {} eV, \nmax_v_para_for_resonance = {} eV,Wave occurs for {}\
     sec during {} sec, \naccleration_time_max {} sec"
 # Read in the data from the csv files
@@ -105,4 +106,5 @@ fig.legend(loc='upper left')
 plt.savefig(folder_name + '/fig.png')
 
 plt.subplots_adjust(wspace=0.5, hspace=0.4)
-plt.show()
+if (display_fig):
+    plt.show()

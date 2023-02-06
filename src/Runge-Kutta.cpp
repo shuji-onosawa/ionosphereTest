@@ -79,7 +79,6 @@ void read_params_from_file(const std::string& filename, Parameters& params) {
     params.B_amplitude = json_params["B_amplitude"].get<double>();
     
     //Input value adjustment
-
     params.mass = params.ion.mass;
     params.electric_acceleration = params.electric_field*params.ion.charge/params.mass;
     params.init_v_perp = sqrt(params.init_v_perp_eV*(1.60218e-19)*2.0/params.mass);
@@ -214,7 +213,7 @@ int main() {
             }
             double dv_paradx = abs(v_para-v_para_prev_x);
             
-            ofs_x << x_para_grid/1e3 << "," << t << "," << 1.0 << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << v_para_eV+v_perp_eV << "," << (v_para_eV+v_perp_eV)*t_per_para_grid/first_t_per_para_grid << "," << inval_lat/3.141592*180.0 << std::endl;
+            ofs_x << x_para_grid/1e3 << "," << t << "," << 1.0 << "," << v_perp << "," << v_para << "," << pitch_angle<< "," << v_perp_eV << "," << v_para_eV << "," << v_para_eV+v_perp_eV << "," << (v_para_eV+v_perp_eV) << "," << inval_lat/3.141592*180.0 << std::endl;
             // flux = constant, so 1/v_para = relative_density, I think
 
             // prev ver relative_density (It's wrong)

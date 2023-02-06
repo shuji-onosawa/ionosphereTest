@@ -23,3 +23,4 @@ const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decre
 ///// Test_parameter
 const double B_amplitude = 0.0;
 ////
+display_fig

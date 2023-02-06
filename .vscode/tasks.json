@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build and Run",
+            "label": "Compile and Run",
             "type": "shell",
             "command": "g++",
             "args": [
@@ -20,7 +20,7 @@
         },
 
         {
-            "label": "compile and run",
+            "label": "Compile",
             "type": "shell",
             "command": "g++",
             "args": [
@@ -29,6 +29,23 @@
                 "-o",
                 "./execute/Runge-Kutta.out",
                 "./src/Runge-Kutta.cpp"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+
+        {
+            "label": "run.py",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "./src/run.py"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
