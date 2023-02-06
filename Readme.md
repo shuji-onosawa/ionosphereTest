@@ -62,3 +62,11 @@ If you rewrite some parameter, output graph's name is changed, but some other pa
 
 ## Equation
 you read doc folder.
+
+
+## Library
+We use 
+https://github.com/nlohmann/json/blob/develop/include/nlohmann/json.hpp
+for json include
+(you **dont't** have to install this.
+ But, We use this in src/json.hpp)

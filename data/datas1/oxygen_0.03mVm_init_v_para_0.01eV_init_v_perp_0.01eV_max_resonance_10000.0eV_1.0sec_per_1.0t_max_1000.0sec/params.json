@@ -1,0 +1,19 @@
+{
+"ion_name" : "oxygen",
+"init_v_para_eV":0.01,
+"init_v_perp_eV":0.01,
+"max_v_para_for_resonance_eV":10000.00,
+"electric_field_mV/m":0.03,
+"occur_duration":1.00,
+"occur_period":1.00,
+"accele_t_max":1000.00,
+"folder_ver":"datas1",
+"L_shell":10.0,
+"init_Inval_lat_deg":75.0,
+"dx_para_grid":1000,
+"dt":0.001,
+"T":200.0,
+"write_out_times":10,
+"enable_lat_decrease":1.0,
+"B_amplitude":0.0
+}
