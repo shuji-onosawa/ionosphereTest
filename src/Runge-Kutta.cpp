@@ -33,6 +33,8 @@ const double dt = 0.001;//(s)
 const double T = 200.0;//(s) // Simulation duration
 const int write_out_times = 10; // How many calculations do you write once (for time plot)?
 const double enable_lat_decrease = 1.0;//If this is 1, you think effect of decrease invalid latitude. if this is 0, no effect.
+///// Test_parameter
+const double B_amplitude = 0.0;
 ////
 
 
@@ -45,6 +47,22 @@ const double max_v_para_for_resonance = sqrt(max_v_para_for_resonance_eV*(1.6021
 const double R_e = 6.3e6;
 const double init_Inval_lat = init_Inval_lat_deg/180.0*3.141592;
 
+double apply_field(double field, double v_para,double t){
+    if((v_para>max_v_para_for_resonance||fmod(t,occur_period)>occur_duration)||accele_t_max<t){
+        return 0.0;
+    }else{
+        return field;
+    }
+}
+
+double apply_electric_acceleration(double v_para,double t){
+    return apply_field(electric_acceleration, v_para, t);
+}
+
+double apply_magnetic_field(double v_para,double t){
+    return B_amplitude;//apply_field(B_amplitude, v_para, t);
+}
+
 double grad_field(double inval_lat){
     return 3.0*sin(inval_lat)*(5.0*sin(inval_lat)*sin(inval_lat)+3.0)
 /(pow((1.0+3.0*sin(inval_lat)*sin(inval_lat)),1.5)*cos(inval_lat)*cos(inval_lat))
@@ -56,15 +74,13 @@ double dlambda(double inval_lat){
 }
 
 //Calculation
-double dv_para(double v_perp, double v_para, double inval_lat) {
-    return grad_field(inval_lat) * 0.5 * pow(v_perp, 2.0);
+double dv_para(double v_perp, double v_para, double t, double inval_lat) {
+    double B_wave = apply_magnetic_field(v_para, t);
+    return grad_field(inval_lat) * 0.5 * pow(v_perp, 2.0) + ion.charge * B_wave/ion.mass * v_perp;
 }
 
 double dv_perp(double v_perp, double v_para, double t, double inival_lat) {
-    double dv_perp_val = electric_acceleration - v_para / v_perp * dv_para(v_perp, v_para, inival_lat);
-    if((v_para>max_v_para_for_resonance||fmod(t,occur_period)>occur_duration)||accele_t_max<t){
-        dv_perp_val = - v_para / v_perp * dv_para(v_perp, v_para, inival_lat);
-    }
+    double dv_perp_val = apply_electric_acceleration(v_para, t) - v_para / v_perp * dv_para(v_perp, v_para, t, inival_lat);
     return dv_perp_val;
 }
 
@@ -92,19 +108,19 @@ int main() {
     ofs_x << "x,time,relative_density,v_perp,v_para,pitch_angle,v_perp_eV,v_para_eV,energy,energy_density,inval_lat" << std::endl;
 
     
-    while (t < T) {
+    while (t < T && v_perp > 0.0) { // v_perp<0で止める
         //RK4
         double k1_perp = dv_perp(v_perp, v_para, t, inval_lat);
-        double k1_para = dv_para(v_perp, v_para, inval_lat);
+        double k1_para = dv_para(v_perp, v_para, t,inval_lat);
 
         double k2_perp = dv_perp(v_perp + 0.5 * dt * k1_perp, v_para + 0.5 * dt * k1_para, t+0.5*dt, inval_lat);
-        double k2_para = dv_para(v_perp + 0.5 * dt * k1_perp, v_para + 0.5 * dt * k1_para, inval_lat);
+        double k2_para = dv_para(v_perp + 0.5 * dt * k1_perp, v_para + 0.5 * dt * k1_para, t+0.5*dt,inval_lat);
 
         double k3_perp = dv_perp(v_perp + 0.5 * dt * k2_perp, v_para + 0.5 * dt * k2_para, t+0.5*dt, inval_lat);
-        double k3_para = dv_para(v_perp + 0.5 * dt * k2_perp, v_para + 0.5 * dt * k2_para, inval_lat);
+        double k3_para = dv_para(v_perp + 0.5 * dt * k2_perp, v_para + 0.5 * dt * k2_para, t+0.5*dt, inval_lat);
 
         double k4_perp = dv_perp(v_perp + dt * k3_perp, v_para + dt * k3_para, t+dt, inval_lat);
-        double k4_para = dv_para(v_perp + dt * k3_perp, v_para + dt * k3_para, inval_lat);
+        double k4_para = dv_para(v_perp + dt * k3_perp, v_para + dt * k3_para, t+dt, inval_lat);
         v_perp += dt / 6.0 * (k1_perp + 2.0 * k2_perp + 2.0 * k3_perp + k4_perp);
         v_para += dt / 6.0 * (k1_para + 2.0 * k2_para + 2.0 * k3_para + k4_para);
         t += dt;
@@ -159,6 +175,11 @@ int main() {
         }
 
     }
+
+    if(v_perp<0.0){
+        std::cout<<"Simulation is stopped because v_perp<0"<<"\n";
+    }
+
     ofs_t.close();
     ofs_x.close();
 
