@@ -18,13 +18,13 @@ const ion_type proton{"proton",1.0*massunit,chargeunit};
 ////Parameter
 //Graphs_file_name_param
 const ion_type ion = oxygen;
-const double electric_field = 1.0e-4;
+const double electric_field = 2.0e-4;
 const double init_v_perp_eV = 0.01;
 const double init_v_para_eV = 0.01;
-const double max_v_para_for_resonance_eV = 1000.0;
+const double max_v_para_for_resonance_eV = 10000.0;
 const double occur_duration = 1.0;
 const double occur_period = 1.0;//occur_period秒の間にoccur_duration秒共鳴加速が発生
-const double accele_t_max = 9999.0;
+const double accele_t_max = 100.0;
 //Graphs_file_No_name_param
 const double L_shell = 10.0;
 const double init_Inval_lat_deg = 75.0;
