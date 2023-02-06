@@ -1,16 +1,18 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import json
+import matplotlib.colors
 
 
 def initialize_parameters():
     """ Initialize the parameters used in the script. """
     params = {}
-    params['upper_distance_acceleration_area'] = 500  # km
-    params['lower_distance_acceleration_area'] = 1000  # km
+    params['upper_distance_acceleration_area'] = 0  # km
+    params['lower_distance_acceleration_area'] = 7000  # km
     params['dt'] = 0.1
-    params['acceleration_time'] = 10
-    params['observe_time'] = 30
+    params['acceleration_time'] = 200
+    params['observe_time'] = 350
     return params
 
 
@@ -44,8 +46,8 @@ dlists = pd.read_csv('./data/' + folder_ver + '/folderlists.csv', header=0)
 
 # Pitch angles
 pitch_angles = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
-v_perps = list(range(10, 500, 10))
-v_paras = list(range(10, 500, 10))
+v_perps = np.float_power(10.0, list(np.arange(0.4, 3.2, 0.2)))
+v_paras = np.float_power(10.0, list(np.arange(0.4, 3.2, 0.2)))
 
 n = int(params['observe_time'] / params['dt']) + 1
 relative_density_sums_ang = [[0 for _ in range(2 * n)] for _ in range(len(pitch_angles) - 1)]
@@ -53,6 +55,7 @@ relative_density_sums_perp = [[0 for _ in range(2 * n)] for _ in range(len(v_per
 relative_density_sums_para = [[0 for _ in range(2 * n)] for _ in range(len(v_paras) - 1)]
 
 for name in dlists["foldername"]:
+    print("plotDensity" + name + "\n")
     # Read data
     df = pd.read_csv(name + '/result_x.csv', header=0)
 
@@ -117,36 +120,62 @@ t_plot = [i * params['dt'] for i in range(2 * n)]
 
 # Remove last element from pitch angles list
 pitch_angles.pop(len(pitch_angles) - 1)
-v_perps.pop(len(v_perps) - 1)
-v_paras.pop(len(v_paras) - 1)
+v_perps = np.delete(v_perps, (len(v_perps) - 1))
+v_paras = np.delete(v_paras, (len(v_paras) - 1))
 
-fig, axs = plt.subplots(3, 1, figsize=(12, 8))
+fig, axs = plt.subplots(3, 3, figsize=(12, 8))
 axs = axs.flatten()
 
 # relative_density_sums_angをカラープロットします
-axs[0].set_title('Graph1:ang_density')
+# axs[0].set_title('Graph1:ang_density')
 mappable1 = axs[0].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang)
 axs[0].set_xlabel('t')
 axs[0].set_ylabel('pitch_angle')
 fig.colorbar(mappable1, ax=axs[0], orientation="vertical")
 axs[0].set_label("erg_density")
 
+relative_density_sums_ang = np.array(relative_density_sums_ang) + 1e-10
+mappable1 = axs[3].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang, norm=matplotlib.colors.LogNorm())
+axs[3].set_xlabel('t')
+axs[3].set_ylabel('pitch_angle')
+fig.colorbar(mappable1, ax=axs[0], orientation="vertical")
+axs[3].set_label("erg_density")
+
+
 # relative_density_sums_perpをカラープロットします
-axs[1].set_title('Graph2:perp_density')
+# axs[1].set_title('Graph2:perp_density')
 mappable2 = axs[1].pcolormesh(t_plot, v_perps, relative_density_sums_perp)
 axs[1].set_xlabel('time')
 axs[1].set_ylabel('v_perp_eV')
+axs[1].set_yscale('log')
 fig.colorbar(mappable2, ax=axs[1], orientation="vertical")
 axs[1].set_label("density")
 
+relative_density_sums_perp = np.array(relative_density_sums_perp) + 1e-10
+mappable2 = axs[4].pcolormesh(t_plot, v_perps, relative_density_sums_perp, norm=matplotlib.colors.LogNorm())
+axs[4].set_xlabel('time')
+axs[4].set_ylabel('v_perp_eV')
+axs[4].set_yscale('log')
+fig.colorbar(mappable2, ax=axs[1], orientation="vertical")
+axs[4].set_label("density")
 
-# relative_density_sums_paraをlogでカラープロットします
-axs[2].set_title('Graph3:para_density')
+
+# relative_density_sums_paraをカラープロットします
+# axs[2].set_title('Graph3:para_density')
 mappable3 = axs[2].pcolormesh(t_plot, v_paras, relative_density_sums_para)
 axs[2].set_xlabel('t')
 axs[2].set_ylabel('v_para_eV')
+axs[2].set_yscale('log')
 fig.colorbar(mappable3, ax=axs[2], orientation="vertical")
 axs[2].set_label("density")
+
+relative_density_sums_para = np.array(relative_density_sums_para) + 1e-10
+mappable3 = axs[5].pcolormesh(t_plot, v_paras, relative_density_sums_para(), norm=matplotlib.colors.LogNorm())
+axs[5].set_xlabel('t')
+axs[5].set_ylabel('v_para_eV')
+axs[5].set_yscale('log')
+fig.colorbar(mappable3, ax=axs[2], orientation="vertical")
+axs[5].set_label("density")
 
 
 # plt.subplots_adjust(wspace=0.5, hspace=0.4)

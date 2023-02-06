@@ -2,6 +2,7 @@ import json
 import math
 import subprocess
 import csv
+import numpy as np
 
 # Load params.json
 with open("./src/params.json", "r") as f:
@@ -12,10 +13,10 @@ params["display_fig"] = False
 folderlists = []
 
 # Increase electric_field_mV/m by 0.01 for 10 times
-params["electric_field_mV/m"] = 0.02
-for i in range(3):
+angles = 0.5 * np.pi
+for i in range(8):
     n = 3  # 切り捨てしたい桁
-    val = math.floor((0.01 + params["electric_field_mV/m"]) * 10 ** n) / (10 ** n)
+    val = math.floor(0.3 * (np.cos(np.pi / 180.0 * (i + 0.5) * 10.0)) * 10 ** n) / (10 ** n)
     params["electric_field_mV/m"] = val
     with open("./src/params.json", "w") as f:
         json.dump(params, f, indent=4, separators=(',', ': '))
@@ -43,6 +44,7 @@ for i in range(3):
                                                                                max_v_para_for_resonance_eV, occur_duration, occur_period,
                                                                                accele_t_max)
         folderlists.append([i, folder_name])
+        print("Calc" + folder_name + "\n")
 
 params["display_fig"] = prev_display_fig
 with open("./src/params.json", "w") as f:
