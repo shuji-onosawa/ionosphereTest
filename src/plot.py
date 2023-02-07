@@ -1,9 +1,38 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import json
+import os
+import shutil
 
+# Get parameter from json
+json_open = open("./src/params.json", 'r')
+paramlist = json.load(json_open)
+
+ion_name = paramlist["ion_name"]
+init_v_para_eV = paramlist["init_v_para_eV"]
+init_v_perp_eV = paramlist["init_v_perp_eV"]
+max_v_para_for_resonance_eV = paramlist["max_v_para_for_resonance_eV"]
+electric_field = paramlist["electric_field_mV/m"]
+occur_duration = paramlist["occur_duration"]
+occur_period = paramlist["occur_period"]
+accele_t_max = paramlist["accele_t_max"]
+folder_ver = paramlist["folder_ver"]
+display_fig = paramlist["display_fig"]
+title_format = "{}, {} mV/m, init_v_para = {} eV, init_v_perp = {} eV, \nmax_v_para_for_resonance = {} eV,Wave occurs for {}\
+    sec during {} sec, \naccleration_time_max {} sec"
 # Read in the data from the csv files
 t_data = pd.read_csv('./data/result_t.csv')
 x_data = pd.read_csv('./data/result_x.csv')
+
+# makeDirectory
+folder_name_format = "{}_{}mVm_init_v_para_{}eV_init_v_perp_{}eV_max_resonance_{}eV_{}sec_per_{}t_max_{}sec"
+folder_name = './data/' + folder_ver + '/' + folder_name_format.format(ion_name, electric_field, init_v_para_eV, init_v_perp_eV,
+                                                                       max_v_para_for_resonance_eV, occur_duration, occur_period, accele_t_max)
+os.makedirs(folder_name, exist_ok=True)
+shutil.copy('./data/result_t.csv', folder_name)
+shutil.copy('./data/result_x.csv', folder_name)
+shutil.copy('./src/params.json', folder_name)
+
 
 # Create figure and axes
 fig, ((ax1, ax2), (ax3, ax4), (ax5, ax6)) = plt.subplots(3, 2, figsize=(12, 12))
@@ -68,28 +97,14 @@ ax6.set_ylabel('Energy (eV)')
 # ax6_2.semilogx(x_data['x'], x_data['energy_density'], 'm', label='')
 # ax6_2.set_ylabel('Energy density')
 
-# Get parameter from c++
-with open("./data/params.txt") as f:
-    paramlist = [s.strip() for s in f.readlines()]
-
-ion_name = paramlist[0]
-init_v_para_eV = paramlist[1]
-init_v_perp_eV = paramlist[2]
-max_v_para_for_resonance_eV = paramlist[3]
-electric_field = paramlist[4]
-occur_duration = paramlist[5]
-occur_period = paramlist[6]
-accele_t_max = paramlist[7]
-title_format = "{}, {} mV/m, init_v_para = {} eV, init_v_perp = {} eV, \nmax_v_para_for_resonance = {} eV,Wave occurs for {}\
-    sec during {} sec, \naccleration_time_max {} sec"
 plt.suptitle(title_format.format(ion_name, electric_field, init_v_para_eV, init_v_perp_eV, max_v_para_for_resonance_eV,
              occur_duration, occur_period, accele_t_max))
 plt.subplots_adjust(wspace=0.5, hspace=0.4)
 
 fig.legend(loc='upper left')
-file_name_format = "./graphs/{}_{}mVm_init_v_para_{}eV_init_v_perp_{}eV_max_resonance_{}eV_{}sec_per_{}t_max_{}sec.png"
-plt.savefig(file_name_format.format(ion_name, electric_field, init_v_para_eV, init_v_perp_eV, max_v_para_for_resonance_eV,
-            occur_duration, occur_period, accele_t_max))
+
+plt.savefig(folder_name + '/fig.png')
 
 plt.subplots_adjust(wspace=0.5, hspace=0.4)
-plt.show()
+if (display_fig):
+    plt.show()
