@@ -3,16 +3,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 import matplotlib.colors
+from multiprocessing import Process, Manager
 
 
 def initialize_parameters():
     """ Initialize the parameters used in the script. """
     params = {}
     params['upper_distance_acceleration_area'] = 0  # km
-    params['lower_distance_acceleration_area'] = 7000  # km
+    params['lower_distance_acceleration_area'] = 6998  # km
     params['dt'] = 0.1
-    params['acceleration_time'] = 200
-    params['observe_time'] = 350
+    params['acceleration_time'] = 300
+    params['observe_time'] = 400
+    params['eps'] = 1e0
     return params
 
 
@@ -43,25 +45,37 @@ folder_name = './data/' + folder_ver + '/' + folder_name_format.format(ion_name,
                                                                        max_v_para_for_resonance_eV, occur_duration, occur_period, accele_t_max)
 dlists = pd.read_csv('./data/' + folder_ver + '/folderlists.csv', header=0)
 
-
 # Pitch angles
 pitch_angles = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
 v_perps = np.float_power(10.0, list(np.arange(0.4, 3.2, 0.2)))
 v_paras = np.float_power(10.0, list(np.arange(0.4, 3.2, 0.2)))
 
 n = int(params['observe_time'] / params['dt']) + 1
+x_min = params['upper_distance_acceleration_area']
+x_max = params['lower_distance_acceleration_area']
 relative_density_sums_ang = [[0 for _ in range(2 * n)] for _ in range(len(pitch_angles) - 1)]
 relative_density_sums_perp = [[0 for _ in range(2 * n)] for _ in range(len(v_perps) - 1)]
 relative_density_sums_para = [[0 for _ in range(2 * n)] for _ in range(len(v_paras) - 1)]
 
-for name in dlists["foldername"]:
-    print("plotDensity" + name + "\n")
+manager = Manager()
+return_dict = manager.dict()
+processes = []
+return_dict['ang'] = relative_density_sums_ang
+return_dict['perp'] = relative_density_sums_perp
+return_dict['para'] = relative_density_sums_para
+
+
+def process_data(proc_num, return_dict):
     # Read data
+    name = dlists.iat[proc_num, 1]
     df = pd.read_csv(name + '/result_x.csv', header=0)
+    print(name + "Plot\n")
+
+    s_ang = [[0 for _ in range(2 * n)] for _ in range(len(pitch_angles) - 1)]
+    s_perp = [[0 for _ in range(2 * n)] for _ in range(len(v_perps) - 1)]
+    s_para = [[0 for _ in range(2 * n)] for _ in range(len(v_paras) - 1)]
 
     # Filter data by distance
-    x_min = params['upper_distance_acceleration_area']
-    x_max = params['lower_distance_acceleration_area']
     df = df[(df["x"] >= x_min) & (df["x"] <= x_max)]
 
     # Minimum and maximum times
@@ -71,8 +85,6 @@ for name in dlists["foldername"]:
     # Number of time steps
     nt_acc = int((t_max - t_min) / params['dt']) + 1
 
-    # Initialize lists to store relative density and energy density sums
- 
     # Iterate over pitch angles and time steps
     for i in range(len(pitch_angles) - 1):
         for j in range(2 * n):
@@ -85,7 +97,7 @@ for name in dlists["foldername"]:
                              (df["pitch_angle"] < pitch_angles[i + 1])]
             
             # Sum relative density and energy density for current iteration
-            relative_density_sums_ang[i][j] += filtered_df["relative_density"].sum()
+            s_ang[i][j] += filtered_df["relative_density"].sum()
 
     for i in range(len(v_perps) - 1):
         for j in range(2 * n):
@@ -97,8 +109,8 @@ for name in dlists["foldername"]:
             filtered_df = df[(t_min_j <= df["time"]) & (df["time"] < t_max_j) & (v_perps[i] <= df["v_perp_eV"]) &
                              (df["v_perp_eV"] < v_perps[i + 1])]
             
-            # Sum relative density and energy density for current iteration
-            relative_density_sums_perp[i][j] += filtered_df["relative_density"].sum()
+            # Sum relative density and energy density for current
+            s_perp[i][j] += filtered_df["relative_density"].sum()
 
     for i in range(len(v_paras) - 1):
         for j in range(2 * n):
@@ -110,9 +122,26 @@ for name in dlists["foldername"]:
             filtered_df = df[(t_min_j <= df["time"]) & (df["time"] < t_max_j) & (v_paras[i] <= df["v_para_eV"]) &
                              (df["v_para_eV"] < v_paras[i + 1])]
             
-            # Sum relative density and energy density for current iteration
-            relative_density_sums_para[i][j] += filtered_df["relative_density"].sum()
+            # Sum relative density and energy density for current
+            s_para[i][j] += filtered_df["relative_density"].sum()
+    # Sum the results from all processes
+    return_dict['ang'] += np.array(s_ang)
+    return_dict['perp'] += np.array(s_perp)
+    return_dict['para'] += np.array(s_para)
 
+
+for proc_num in range(len(dlists["foldername"])):
+    p = Process(target=process_data, args=(proc_num, return_dict))
+    processes.append(p)
+    p.start()
+
+# Wait for all processes to finish
+for p in processes:
+    p.join()
+
+relative_density_sums_ang = return_dict['ang'].tolist()
+relative_density_sums_perp = return_dict['perp'].tolist()
+relative_density_sums_para = return_dict['para'].tolist()
 
 # Create list of times for plot
 t_plot = [i * params['dt'] for i in range(2 * n)]
@@ -123,55 +152,55 @@ pitch_angles.pop(len(pitch_angles) - 1)
 v_perps = np.delete(v_perps, (len(v_perps) - 1))
 v_paras = np.delete(v_paras, (len(v_paras) - 1))
 
-fig, axs = plt.subplots(3, 3, figsize=(12, 8))
+fig, axs = plt.subplots(3, 2, figsize=(12, 8))
 axs = axs.flatten()
 
 # relative_density_sums_angをカラープロットします
 # axs[0].set_title('Graph1:ang_density')
 mappable0 = axs[0].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang)
-axs[0].set_xlabel('t')
+axs[0].set_xlabel('time')
 axs[0].set_ylabel('pitch_angle')
 fig.colorbar(mappable0, ax=axs[0], orientation="vertical")
-axs[0].set_label("erg_density")
+axs[0].set_label("density")
 
-relative_density_sums_ang = np.array(relative_density_sums_ang) + 1e-10
-mappable3 = axs[3].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang, norm=matplotlib.colors.LogNorm())
-axs[3].set_xlabel('t')
-axs[3].set_ylabel('pitch_angle')
-fig.colorbar(mappable3, ax=axs[3], orientation="vertical")
-axs[3].set_label("erg_density")
+relative_density_sums_ang = np.array(relative_density_sums_ang) + params['eps']
+mappable1 = axs[1].pcolormesh(t_plot, pitch_angles, relative_density_sums_ang, norm=matplotlib.colors.LogNorm())
+axs[1].set_xlabel('time')
+axs[1].set_ylabel('pitch_angle')
+fig.colorbar(mappable1, ax=axs[1], orientation="vertical")
+axs[1].set_label("density")
 
 
 # relative_density_sums_perpをカラープロットします
 # axs[1].set_title('Graph2:perp_density')
-mappable1 = axs[1].pcolormesh(t_plot, v_perps, relative_density_sums_perp)
-axs[1].set_xlabel('time')
-axs[1].set_ylabel('v_perp_eV')
-axs[1].set_yscale('log')
-fig.colorbar(mappable1, ax=axs[1], orientation="vertical")
-axs[1].set_label("density")
+mappable1 = axs[2].pcolormesh(t_plot, v_perps, relative_density_sums_perp)
+axs[2].set_xlabel('time')
+axs[2].set_ylabel('v_perp_eV')
+axs[2].set_yscale('log')
+fig.colorbar(mappable1, ax=axs[2], orientation="vertical")
+axs[2].set_label("density")
 
-relative_density_sums_perp = np.array(relative_density_sums_perp) + 1e-10
-mappable4 = axs[4].pcolormesh(t_plot, v_perps, relative_density_sums_perp, norm=matplotlib.colors.LogNorm())
-axs[4].set_xlabel('time')
-axs[4].set_ylabel('v_perp_eV')
-axs[4].set_yscale('log')
-fig.colorbar(mappable4, ax=axs[4], orientation="vertical")
-axs[4].set_label("density")
+relative_density_sums_perp = np.array(relative_density_sums_perp) + params['eps']
+mappable3 = axs[3].pcolormesh(t_plot, v_perps, relative_density_sums_perp, norm=matplotlib.colors.LogNorm())
+axs[3].set_xlabel('time')
+axs[3].set_ylabel('v_perp_eV')
+axs[3].set_yscale('log')
+fig.colorbar(mappable3, ax=axs[3], orientation="vertical")
+axs[3].set_label("density")
 
 
 # relative_density_sums_paraをカラープロットします
 # axs[2].set_title('Graph3:para_density')
-mappable2 = axs[2].pcolormesh(t_plot, v_paras, relative_density_sums_para)
-axs[2].set_xlabel('t')
-axs[2].set_ylabel('v_para_eV')
-axs[2].set_yscale('log')
-fig.colorbar(mappable2, ax=axs[2], orientation="vertical")
-axs[2].set_label("density")
+mappable4 = axs[4].pcolormesh(t_plot, v_paras, relative_density_sums_para)
+axs[4].set_xlabel('time')
+axs[4].set_ylabel('v_para_eV')
+axs[4].set_yscale('log')
+fig.colorbar(mappable4, ax=axs[4], orientation="vertical")
+axs[4].set_label("density")
 
-relative_density_sums_para = np.array(relative_density_sums_para) + 1e-10
+relative_density_sums_para = np.array(relative_density_sums_para) + params['eps']
 mappable5 = axs[5].pcolormesh(t_plot, v_paras, relative_density_sums_para, norm=matplotlib.colors.LogNorm())
-axs[5].set_xlabel('t')
+axs[5].set_xlabel('time')
 axs[5].set_ylabel('v_para_eV')
 axs[5].set_yscale('log')
 fig.colorbar(mappable5, ax=axs[5], orientation="vertical")
