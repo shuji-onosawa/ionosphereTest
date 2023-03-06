@@ -120,7 +120,7 @@ double dlambda(double inval_lat, const Parameters& params){
 //Calculation
 double dv_para(double v_perp, double v_para, double t, double inval_lat, const Parameters& params) {
     double B_wave = apply_magnetic_field(v_para, t, params);
-    return grad_field(inval_lat,params) * 0.5 * pow(v_perp, 2.0) + params.ion.charge * B_wave/params.ion.mass * v_perp;
+    return grad_field(inval_lat,params) * 0.5 * pow(v_perp, 2.0) - params.ion.charge * B_wave/params.ion.mass * v_perp;
 }
 
 double dv_perp(double v_perp, double v_para, double t, double inival_lat, const Parameters& params) {
